@@ -9,6 +9,7 @@ namespace GeomFigure
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Hello");
         }
     }
 }
