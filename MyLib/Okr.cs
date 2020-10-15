@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GeomFigure
+namespace MyLib
 {
     // класс окружность
      public class Okr : IGeomFig
