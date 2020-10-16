@@ -6,11 +6,11 @@ using System.Text;
 namespace MyLib
 {
     // класс окружность
-     public class Okr : IGeomFig
+     public class Okruzhnost : IGeomFig
     {
         double[] par; // параметры фигуры. считанные из файла
 
-        public Okr(string[] param)
+        public Okruzhnost(string[] param)
         {
             par = new double[3];
             for (int i = 0; i < 3; i++)

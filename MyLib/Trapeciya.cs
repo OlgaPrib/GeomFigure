@@ -5,11 +5,11 @@ using System.Text;
 
 namespace MyLib
 {
-     public class Trap : IGeomFig
+     public class Trapeciya : IGeomFig
     {
         double[] par; // параметры фигуры. считанные из файла
 
-        public Trap(string[] param)
+        public Trapeciya(string[] param)
         {
             par = new double[8];
             for (int i = 0; i < 8; i++)

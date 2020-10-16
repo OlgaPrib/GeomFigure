@@ -27,6 +27,7 @@ namespace GeomFigure
                 string[] paramFig; //строка с параметрами фигуры
                 IGeomFig[] figures = null; //массив объектов
                 StreamReader reader = new StreamReader(@"1.txt");
+                Dictionary<double, string> srPer = new Dictionary<double, string>(); 
                 string s = reader.ReadToEnd(); // читаем строку до конца
                 reader.Close();
 
@@ -49,11 +50,12 @@ namespace GeomFigure
                         {
                             if (Convert.ToDouble(paramFig[2]) > 0)
                             {
-                                figures[j] = new Okr(paramFig);
+                                figures[j] = new Okruzhnost(paramFig);
                                 pr = pr + figures[j].perimetr;
                                 sq = sq + figures[j].ploshad;
                                 countOkr++;
                                 perOkr = perOkr + figures[j].perimetr;
+                                srPer.Add(perOkr, figures[j].GetType().Name);
                                 j++;
                             }
                             else
@@ -69,15 +71,17 @@ namespace GeomFigure
                                 sq = sq + figures[j].ploshad;
                                 countKv++;
                                 perKv = perKv + figures[j].perimetr;
+                                srPer.Add(perKv, figures[j].GetType().Name);
                                 j++;
                             }
                             else
                             {
-                                figures[j] = new Trap(paramFig);
+                                figures[j] = new Trapeciya(paramFig);
                                 pr = pr + figures[j].perimetr;
                                 sq = sq + figures[j].ploshad;
                                 countTr++;
                                 perTr = perTr + figures[j].perimetr;
+                                srPer.Add(perTr, figures[j].GetType().Name);
                                 j++;
                             }
                         }
@@ -86,23 +90,7 @@ namespace GeomFigure
                     }
                 }
 
-                //среднее значние периметра 
-               /* string typeFig = "";
-                if (countKv != 0)
-                {
-                    typeFig = "Квадрат";
-                    double srednKv = perKv / countKv;
-                }
-                if (countOkr != 0)
-                {
-                    typeFig = "Окружность";
-                    double srednOkr = perOkr / countOkr;
-                }
-                if (countTr != 0)
-                {
-                    typeFig = "Трапеция";
-                    double srednTr = perTr / countTr;
-                }*/
+                
 
                
 
@@ -137,19 +125,16 @@ namespace GeomFigure
                         figures[i].Vyvod(i + 1);
                     }
 
+                    string result = srPer.Values.Max();
+                    Console.WriteLine("\n\n Тип фигуры, с наибольшим значением среднего периметра: " + result);
 
-                   
-                    Console.WriteLine("\n\n Массив, отсортированный по названию \n");
-                    for (int i = 0; i < j; i++)
-                    {
-                        figures[i].Vyvod(i + 1);
-                    }
+
                 }
                 else
                     Console.WriteLine("Элементы отсутствуют");
 
-                Console.WriteLine("Средний периметр всех фигур = " + pr/j);
-                Console.WriteLine("Средняя площадь всех фигур = " + sq / j);
+                Console.WriteLine("\n\n Средний периметр всех фигур = " + pr/j);
+                Console.WriteLine("\n\n Средняя площадь всех фигур = " + sq / j);
 
                 for (int i = 0; i < j; i ++)
                 {
