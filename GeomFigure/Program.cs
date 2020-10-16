@@ -13,21 +13,20 @@ namespace GeomFigure
         {
             try
             {
-                int countKv = 0;
-                double perKv = 0;
-                int countOkr = 0;
-                double perOkr = 0;
-                int countTr = 0;
-                double perTr = 0;
-                double pr = 0;
-                double sq = 0;
+                int countKv = 0; //количество квадратов
+                double perKv = 0; // средний периметр квадратов
+                int countOkr = 0;//количество Окружностей
+                double perOkr = 0;// средний периметр окружностей
+                int countTr = 0;//количество трапеций
+                double perTr = 0;// средний периметр трапеций
+                double pr = 0; // периметр
+                double sq = 0; //площадь
                 int j = 0;
-                int flag = 0;
                 string[] stroki; //массив строк из файла
                 string[] paramFig; //строка с параметрами фигуры
                 IGeomFig[] figures = null; //массив объектов
                 StreamReader reader = new StreamReader(@"1.txt");
-                Dictionary<double, string> srPer = new Dictionary<double, string>(); 
+                Dictionary<double, string> perimDict = new Dictionary<double, string>(); // словарь для средних периметров
                 string s = reader.ReadToEnd(); // читаем строку до конца
                 reader.Close();
 
@@ -51,11 +50,11 @@ namespace GeomFigure
                             if (Convert.ToDouble(paramFig[2]) > 0)
                             {
                                 figures[j] = new Okruzhnost(paramFig);
-                                pr = pr + figures[j].perimetr;
+                                pr = pr + figures[j].perimetr; 
                                 sq = sq + figures[j].ploshad;
                                 countOkr++;
                                 perOkr = perOkr + figures[j].perimetr;
-                                srPer.Add(perOkr, figures[j].GetType().Name);
+                                perimDict.Add(perOkr, figures[j].GetType().Name);
                                 j++;
                             }
                             else
@@ -71,79 +70,55 @@ namespace GeomFigure
                                 sq = sq + figures[j].ploshad;
                                 countKv++;
                                 perKv = perKv + figures[j].perimetr;
-                                srPer.Add(perKv, figures[j].GetType().Name);
+                                perimDict.Add(perKv, figures[j].GetType().Name);
                                 j++;
                             }
-                            else
+                            else if (Trapeciya.proverka(paramFig))
                             {
                                 figures[j] = new Trapeciya(paramFig);
                                 pr = pr + figures[j].perimetr;
                                 sq = sq + figures[j].ploshad;
                                 countTr++;
                                 perTr = perTr + figures[j].perimetr;
-                                srPer.Add(perTr, figures[j].GetType().Name);
+                                perimDict.Add(perTr, figures[j].GetType().Name);
                                 j++;
                             }
+                            else
+                                Console.WriteLine("В строке " + (i + 1) + " возможно неправильно введены параметры!");
                         }
                         else
                             Console.WriteLine("В строке " + (i + 1) + " возможно неправильно введены параметры!");
                     }
                 }
-
-                
-
-               
-
+                               
                 Array.Resize(ref figures, j);
                 if(j > 0)
                 {
                     //вывод исходного массива
-                    Console.WriteLine("\n\n Полученный массив\n");
-                    for (int i=0; i< j; i++)
-                    {
-                        figures[i].Vyvod(i + 1);
-                    }
-                    //сортировка массива по площади
-                    Array.Sort(figures, new SravPoPloshadi());
-                    // Вывод отсортированного массива
-                    
-                    Console.WriteLine("\n\n Массив, отсортированный по площади \n");
-                    for (int i = 0; i < j; i++)
-                    {
-                        figures[i].Vyvod(i + 1);
-                    }
+                     Console.WriteLine("\n\n Полученный массив\n");
+                     for (int i=0; i< j; i++)
+                     {
+                         figures[i].Vyvod(i + 1);
+                     }
+                    // средний периметр всех фигур
+                    Console.WriteLine("\n\n Средний периметр всех фигур = " + pr / j);
 
+                    // средняя площадь всех фигур
+                    Console.WriteLine("\n\n Средняя площадь всех фигур = " + sq / j);
+                    
+                    //сортировка массива по площади и поиск фигуры с наибольшей площадью
+                    Array.Sort(figures, new SravPoPloshadi());
                     int maxValue = figures.Length - 1;
                     Console.WriteLine("\n\n Фигура, с наибольшей площадью \n");
                     figures[maxValue].Vyvod(maxValue + 1);
 
-                    // сортировка массива в порядке убывания периметра
-                    Array.Sort(figures, new SravPoPerimetru());
-                    Console.WriteLine("\n\n Массив, отсортированный по периметру \n");
-                    for (int i = 0; i < j; i++)
-                    {
-                        figures[i].Vyvod(i + 1);
-                    }
-
-                    string result = srPer.Values.Max();
-                    Console.WriteLine("\n\n Тип фигуры, с наибольшим значением среднего периметра: " + result);
-
-
+                    // тип фигуры с наибольшим значением среднего периметра среди всех других типов фигур
+                    string result = perimDict.Values.Max();
+                    Console.WriteLine("\n\n Тип фигуры, с наибольшим значением среднего периметра: " + result);                    
                 }
                 else
                     Console.WriteLine("Элементы отсутствуют");
-
-                Console.WriteLine("\n\n Средний периметр всех фигур = " + pr/j);
-                Console.WriteLine("\n\n Средняя площадь всех фигур = " + sq / j);
-
-                for (int i = 0; i < j; i ++)
-                {
-                    if(figures[i] is Kvadrat)
-                    {
-
-                    }
-                }
-
+               
                 Console.ReadKey();
             }
             catch(FileNotFoundException) { Console.WriteLine("Ошибка открытия файла "); }

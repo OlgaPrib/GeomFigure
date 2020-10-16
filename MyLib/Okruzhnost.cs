@@ -25,7 +25,7 @@ namespace MyLib
         }
 
 
-        //периметр окружности
+        //периметр окружности P = 2piR
         public double perimetr
         {
             get { return  2 * Math.PI * par[2]; }
