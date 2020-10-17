@@ -50,7 +50,9 @@ namespace MyLib
         public static bool proverka (string[] param)
         {
             if (dlina(param[0], param[1], param[2], param[3]) == dlina(param[2], param[3], param[4], param[5]) &&
-                dlina(param[4], param[5], param[6], param[7]) == dlina(param[6], param[7], param[0], param[1]) && dlina(param[0], param[1], param[2], param[3])!= 0) // все стороны равны и не равны 0
+                dlina(param[4], param[5], param[6], param[7]) == dlina(param[6], param[7], param[0], param[1]) && 
+                dlina(param[0], param[1], param[2], param[3])!= 0 &&
+                ugol(param)) // все стороны равны и не равны 0
                 return true; // это квадрат
             else return false;
         }
@@ -62,8 +64,11 @@ namespace MyLib
             double BCx = Convert.ToDouble(param[4]) - Convert.ToDouble(param[2]);
             double BCy = Convert.ToDouble(param[5]) - Convert.ToDouble(param[3]);
             double scalar = ABx * BCx + ABy * BCy; //скалярное произведение (АВ,ВС)
-            double cosA = scalar/
-            if (true)
+            double modAB = Math.Sqrt(Math.Pow(ABx, 2) + Math.Pow(ABy, 2)); //длина АВ по теореме Пифагора
+            double modBC = Math.Sqrt(Math.Pow(BCx, 2) + Math.Pow(BCy, 2)); // длина ВС по теореме Пифагора
+            double cosAlpha = scalar / (modAB * modBC);
+
+            if (cosAlpha == 0)
                 return true;
             else return false;
         }
